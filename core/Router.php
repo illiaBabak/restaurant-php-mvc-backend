@@ -17,7 +17,7 @@ final class Router
         );
 
         $this->routes[strtoupper($method)][] = [
-            'pattern' => $pattern,
+            'pattern' => '#^' . $pattern . '$#',
             'action' => $action
         ];
     }
