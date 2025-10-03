@@ -3,7 +3,7 @@
         'name' => 'illiababak/restaurant-php-mvc-backend',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '2f654543a506fb2826ef09cd414c7303d3cdfcad',
+        'reference' => 'da5888f70a8d97ee4b92a4c8a8dad7dad6925ac4',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -85,7 +85,7 @@
         'illiababak/restaurant-php-mvc-backend' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '2f654543a506fb2826ef09cd414c7303d3cdfcad',
+            'reference' => 'da5888f70a8d97ee4b92a4c8a8dad7dad6925ac4',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

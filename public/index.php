@@ -7,16 +7,18 @@ require __DIR__ . '/../vendor/autoload.php';
 $dotenv = Dotenv\Dotenv::createUnsafeImmutable(__DIR__ . '/../');
 $dotenv->load();
 
-
 use Core\Mongo;
 use Core\Router;
-use App\Controllers\WaitersController;
+use App\Controllers\WaiterController;
 
 Mongo::connect();
 
 $router = new Router();
 
-$router->get('/waiters', WaitersController::class . '@getWaiters');
+$router->get('/waiters', WaiterController::class . '@getWaiters');
+$router->post('/waiters', WaiterController::class . '@createWaiter');
+$router->put('/waiters/{id}', WaiterController::class . "@updateWaiter");
+$router->delete('/waiters/{id}', WaiterController::class . "@deleteWaiter");
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['_method'])) {
     $_SERVER['REQUEST_METHOD'] = strtoupper($_POST['_method']);

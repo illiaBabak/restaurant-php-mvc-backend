@@ -30,4 +30,15 @@ final class Response
 
         return json_encode($payload, JSON_UNESCAPED_UNICODE);
     }
+
+    public static function getBobyRequest(): array
+    {
+        $content_type = $_SERVER['CONTENT_TYPE'] ?? '';
+
+        if (str_contains($content_type, 'application/json')) {
+            return json_decode(file_get_contents('php://input'), true);
+        }
+
+        return $_POST;
+    }
 }
