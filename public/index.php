@@ -15,6 +15,7 @@ $dotenv->load();
 use Core\Mongo;
 use Core\Router;
 use App\Controllers\WaiterController;
+use App\Controllers\DishController;
 
 Mongo::connect();
 
@@ -24,6 +25,11 @@ $router->get('/waiters', WaiterController::class . '@getWaiters');
 $router->post('/waiters', WaiterController::class . '@createWaiter');
 $router->put('/waiters/{id}', WaiterController::class . "@updateWaiter");
 $router->delete('/waiters/{id}', WaiterController::class . "@deleteWaiter");
+
+$router->get("/dishes", DishController::class . "@getDishes");
+$router->post("/dishes", DishController::class . "@createDish");
+$router->put("/dishes/{id}", DishController::class . "@updateDish");
+$router->delete("/dishes/{id}", DishController::class . "@deleteDish");
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['_method'])) {
     $_SERVER['REQUEST_METHOD'] = strtoupper($_POST['_method']);
