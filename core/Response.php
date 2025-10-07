@@ -33,12 +33,6 @@ final class Response
 
     public static function getBobyRequest(): array
     {
-        $content_type = $_SERVER['CONTENT_TYPE'] ?? '';
-
-        if (str_contains($content_type, 'application/json')) {
-            return json_decode(file_get_contents('php://input'), true);
-        }
-
-        return $_POST;
+        return json_decode(file_get_contents('php://input'), true);
     }
 }

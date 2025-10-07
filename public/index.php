@@ -16,6 +16,7 @@ use Core\Mongo;
 use Core\Router;
 use App\Controllers\WaiterController;
 use App\Controllers\DishController;
+use App\Controllers\BillController;
 
 Mongo::connect();
 
@@ -30,6 +31,10 @@ $router->get("/dishes", DishController::class . "@getDishes");
 $router->post("/dishes", DishController::class . "@createDish");
 $router->put("/dishes/{id}", DishController::class . "@updateDish");
 $router->delete("/dishes/{id}", DishController::class . "@deleteDish");
+
+$router->post('/bills', BillController::class . '@createAndExportBill');
+$router->put('/bills/{id}', BillController::class . '@updateBill');
+$router->delete('/bills/{id}', BillController::class . '@deleteBill');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['_method'])) {
     $_SERVER['REQUEST_METHOD'] = strtoupper($_POST['_method']);

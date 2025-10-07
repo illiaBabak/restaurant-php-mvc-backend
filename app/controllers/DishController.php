@@ -29,7 +29,7 @@ class DishController
         return Response::json($dish);
     }
 
-    public function createDish(array $data): string
+    public function createDish(): string
     {
         $body = Response::getBobyRequest();
 
