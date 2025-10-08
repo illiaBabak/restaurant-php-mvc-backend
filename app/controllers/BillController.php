@@ -15,7 +15,7 @@ class BillController
         header('Content-Type: text/csv; charset=utf-8');
 
         $out = fopen('php://output', 'w');
-        fputcsv($out, ['waiter_id', 'id', 'created_at', 'dish_id', 'count'], ',', '"', '\\');
+        fputcsv($out, ['waiter_id', 'id', 'created_at', 'dish_id', 'quantity'], ',', '"', '\\');
 
         foreach ($bill['dishes'] as $dish) {
             fputcsv($out, [
@@ -23,7 +23,7 @@ class BillController
                 $bill['id'] ?? '',
                 $bill['created_at'],
                 $dish['dish_id'] ?? '',
-                $dish['count'] ?? 0,
+                $dish['quantity'] ?? 0,
             ], ',', '"', '\\');
         }
 
@@ -46,8 +46,7 @@ class BillController
         }
 
         $this->generateCSV($data);
-
-        return Response::json("a");
+        exit;
     }
 
     public function updateBill(string $id): string
