@@ -27,16 +27,15 @@ class Waiter
         return (string)$result->getInsertedId();
     }
 
-    public function update(string $waiterId, array $waiterData): int
+    public function update(string $waiterId, array $waiterData): bool
     {
-        $filter = ['_id' => $waiterId];
-        $result = $this->collection->updateOne($filter, ['$set' => $waiterData]);
-        return $result->getUpsertedCount();;
+        $result = $this->collection->updateOne(['id' => $waiterId], ['$set' => $waiterData]);
+        return $result->getModifiedCount() > 0;
     }
 
-    public function delete(string $waiterId): int
+    public function delete(string $waiterId): bool
     {
-        $result = $this->collection->deleteOne(['_id' => $waiterId]);
-        return $result->getDeletedCount();
+        $result = $this->collection->deleteOne(['id' => $waiterId]);
+        return $result->getDeletedCount() > 0;
     }
 }

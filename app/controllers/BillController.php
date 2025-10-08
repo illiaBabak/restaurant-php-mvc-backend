@@ -58,6 +58,8 @@ class BillController
             return Response::error('Request body and id are required', 400);
         }
 
+        unset($data['_id']);
+
         $updatedCount = new Bill()->update($id, $data);
 
         if (!$updatedCount) {

@@ -45,7 +45,7 @@ class DishController
         return Response::json($dishId);
     }
 
-    public function updateDish(string $id, array $data): string
+    public function updateDish(string $id): string
     {
         $body = Response::getBobyRequest();
 
@@ -53,7 +53,9 @@ class DishController
             return Response::error("Request body and id are required", 400);
         }
 
-        $updatedCount = new Dish()->update($id, $data);
+        unset($body['_id']);
+
+        $updatedCount = new Dish()->update($id, $body);
 
         if (!$updatedCount) {
             return Response::error("Dish not updated");

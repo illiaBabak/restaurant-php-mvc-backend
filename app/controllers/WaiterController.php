@@ -43,12 +43,14 @@ class WaiterController
             return Response::error('Request body and id are required', 400);
         }
 
-        $updatedCount = new Waiter()->update($id, $data);
+        unset($data['_id']);
 
-        if (!$updatedCount) {
+        $isUpdated = new Waiter()->update($id, $data);
+
+        if (!$isUpdated) {
             return Response::error('Waiter not updated');
         }
-        return Response::json("Updated successfully: " . $updatedCount);
+        return Response::json("Updated successfully");
     }
 
     public function deleteWaiter(string $id): string

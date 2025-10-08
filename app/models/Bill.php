@@ -24,15 +24,15 @@ class Bill
         return (string) $result->getInsertedId();
     }
 
-    public function update(string $id, array $array): int
+    public function update(string $id, array $array): bool
     {
-        $result = $this->collection->updateOne(['_id' => $id], ['$set' => $array]);
-        return $result->getUpsertedCount();
+        $result = $this->collection->updateOne(['id' => $id], ['$set' => $array]);
+        return $result->getModifiedCount() > 0;
     }
 
-    public function delete(string $id): int
+    public function delete(string $id): bool
     {
-        $result = $this->collection->deleteOne(['_id' => $id]);
-        return $result->getDeletedCount();
+        $result = $this->collection->deleteOne(['id' => $id]);
+        return $result->getDeletedCount() > 0;
     }
 }

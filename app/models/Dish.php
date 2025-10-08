@@ -23,7 +23,7 @@ class Dish
 
     public function getById(string $id): array
     {
-        return $this->collection->findOne(['_id' => $id]);
+        return $this->collection->findOne(['id' => $id]);
     }
 
     public function create(array $dishData): string
@@ -32,16 +32,15 @@ class Dish
         return (string) $result->getInsertedId();
     }
 
-    public function update(string $id, array $dishData): int
+    public function update(string $id, array $dishData): bool
     {
-        $filter = ['_id' => $id];
-        $result = $this->collection->updateOne($filter, ['$set' => $dishData]);
-        return $result->getUpsertedCount();
+        $result = $this->collection->updateOne(['id' => $id], ['$set' => $dishData]);
+        return $result->getModifiedCount() > 0;
     }
 
-    public function delete(string $id): int
+    public function delete(string $id): bool
     {
-        $result = $this->collection->deleteOne(['_id' => $id]);
-        return $result->getDeletedCount();
+        $result = $this->collection->deleteOne(['id' => $id]);
+        return $result->getDeletedCount() > 0;
     }
 }
