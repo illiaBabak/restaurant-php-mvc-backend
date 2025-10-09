@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Core;
 
+use Core\Helper;
+
 final class Response
 {
     public static function json(mixed $data, int $status = 200, array $headers = []): string
@@ -15,7 +17,7 @@ final class Response
             header($name . ': ' . $value);
         }
 
-        return json_encode(['data' => $data, 'error' => null], JSON_UNESCAPED_UNICODE);
+        return json_encode(['data' => Helper::normalizeMongoId($data), 'error' => null], JSON_UNESCAPED_UNICODE);
     }
 
     public static function error(string $message, int $status = 500): string
@@ -31,7 +33,7 @@ final class Response
         return json_encode($payload, JSON_UNESCAPED_UNICODE);
     }
 
-    public static function getBobyRequest(): array
+    public static function getBodyFromRequest(): array
     {
         return json_decode(file_get_contents('php://input'), true);
     }

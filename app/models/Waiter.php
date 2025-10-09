@@ -6,6 +6,8 @@ namespace App\Models;
 
 use Core\Mongo;
 use MongoDB\Collection;
+use MongoDB\BSON\ObjectId;
+use MongoDB\Driver\Exception\Exception;
 
 class Waiter
 {
@@ -23,19 +25,38 @@ class Waiter
 
     public function create(array $waiterData): string
     {
-        $result = $this->collection->insertOne($waiterData);
-        return (string)$result->getInsertedId();
+        try {
+            $result = $this->collection->insertOne($waiterData);
+            $insertedId = $result->getInsertedId();
+
+            if ($insertedId === null) return '';
+
+            return (string) $insertedId;
+        } catch (Exception $e) {
+            error_log('MongoDB insert failed: ' . $e->getMessage());
+            return '';
+        }
     }
 
     public function update(string $waiterId, array $waiterData): bool
     {
-        $result = $this->collection->updateOne(['id' => $waiterId], ['$set' => $waiterData]);
-        return $result->getModifiedCount() > 0;
+        try {
+            $result = $this->collection->updateOne(['_id' => new ObjectId($waiterId)], ['$set' => $waiterData]);
+            return $result->getModifiedCount() > 0;
+        } catch (Exception $e) {
+            error_log('MongoDB update failed: ' . $e->getMessage());
+            return false;
+        }
     }
 
     public function delete(string $waiterId): bool
     {
-        $result = $this->collection->deleteOne(['id' => $waiterId]);
-        return $result->getDeletedCount() > 0;
+        try {
+            $result = $this->collection->deleteOne(['_id' => new ObjectId($waiterId)]);
+            return $result->getDeletedCount() > 0;
+        } catch (Exception $e) {
+            error_log('MongoDB delete failed: ' . $e->getMessage());
+            return false;
+        }
     }
 }

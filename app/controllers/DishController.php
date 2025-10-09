@@ -31,36 +31,34 @@ class DishController
 
     public function createDish(): string
     {
-        $body = Response::getBobyRequest();
+        $bodyData = Response::getBodyFromRequest();
 
-        if (!$body) {
+        if (!$bodyData) {
             return Response::error("Request body is required", 400);
         }
 
-        $dishId = new Dish()->create($body);
+        $dishId = new Dish()->create($bodyData);
 
         if (!$dishId) {
             return Response::error("Dish not created");
         }
-        return Response::json($dishId);
+        return Response::json("Created successfully (dish id: " . $dishId . ")");
     }
 
     public function updateDish(string $id): string
     {
-        $body = Response::getBobyRequest();
+        $bodyData = Response::getBodyFromRequest();
 
-        if (!$body || !$id) {
+        if (!$bodyData || !$id) {
             return Response::error("Request body and id are required", 400);
         }
 
-        unset($body['_id']);
+        $isUpdated = new Dish()->update($id, $bodyData);
 
-        $updatedCount = new Dish()->update($id, $body);
-
-        if (!$updatedCount) {
+        if (!$isUpdated) {
             return Response::error("Dish not updated");
         }
-        return Response::json("Updated successfully: " . $updatedCount);
+        return Response::json("Updated successfully");
     }
 
     public function deleteDish(string $id): string
@@ -69,11 +67,11 @@ class DishController
             return Response::error('Id is required', 400);
         }
 
-        $deletedCount = new Dish()->delete($id);
+        $isDeleted = new Dish()->delete($id);
 
-        if (!$deletedCount) {
+        if (!$isDeleted) {
             return Response::error('Dish not deleted');
         }
-        return Response::json('Deleted successfully' . $deletedCount);
+        return Response::json('Deleted successfully');
     }
 }

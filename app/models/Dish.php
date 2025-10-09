@@ -6,6 +6,8 @@ namespace App\Models;
 
 use Core\Mongo;
 use MongoDB\Collection;
+use MongoDB\BSON\ObjectId;
+use MongoDB\Driver\Exception\Exception;
 
 class Dish
 {
@@ -28,19 +30,38 @@ class Dish
 
     public function create(array $dishData): string
     {
-        $result = $this->collection->insertOne($dishData);
-        return (string) $result->getInsertedId();
+        try {
+            $result = $this->collection->insertOne($dishData);
+            $insertedId = $result->getInsertedId();
+
+            if ($insertedId === null) return '';
+
+            return (string) $insertedId;
+        } catch (Exception $e) {
+            error_log('MongoDB insert failed: ' . $e->getMessage());
+            return '';
+        }
     }
 
     public function update(string $id, array $dishData): bool
     {
-        $result = $this->collection->updateOne(['id' => $id], ['$set' => $dishData]);
-        return $result->getModifiedCount() > 0;
+        try {
+            $result = $this->collection->updateOne(['_id' => new ObjectId($id)], ['$set' => $dishData]);
+            return $result->getModifiedCount() > 0;
+        } catch (Exception $e) {
+            error_log('MongoDB update failed: ' . $e->getMessage());
+            return false;
+        }
     }
 
     public function delete(string $id): bool
     {
-        $result = $this->collection->deleteOne(['id' => $id]);
-        return $result->getDeletedCount() > 0;
+        try {
+            $result = $this->collection->deleteOne(['_id' => new ObjectId($id)]);
+            return $result->getDeletedCount() > 0;
+        } catch (Exception $e) {
+            error_log('MongoDB delete failed: ' . $e->getMessage());
+            return false;
+        }
     }
 }

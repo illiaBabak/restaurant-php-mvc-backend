@@ -33,38 +33,36 @@ class BillController
 
     public function createAndExportBill(): string
     {
-        $data = Response::getBobyRequest();
+        $bodyData = Response::getBodyFromRequest();
 
-        if (!$data) {
+        if (!$bodyData) {
             return Response::error('Request body is required', 400);
         }
 
-        $billId = new Bill()->create($data);
+        $billId = new Bill()->create($bodyData);
 
         if (!$billId) {
             return Response::error('Bill not created');
         }
 
-        $this->generateCSV($data);
+        $this->generateCSV($bodyData);
         exit;
     }
 
     public function updateBill(string $id): string
     {
-        $data = Response::getBobyRequest();
+        $bodyData = Response::getBodyFromRequest();
 
-        if (!$data || !$id) {
+        if (!$bodyData || !$id) {
             return Response::error('Request body and id are required', 400);
         }
 
-        unset($data['_id']);
+        $isUpdated = new Bill()->update($id, $bodyData);
 
-        $updatedCount = new Bill()->update($id, $data);
-
-        if (!$updatedCount) {
+        if (!$isUpdated) {
             return Response::error('Bill not updated');
         }
-        return Response::json("Updated successfully: " . $updatedCount);
+        return Response::json("Updated successfully");
     }
 
     public function deleteBill(string $id): string
@@ -73,11 +71,11 @@ class BillController
             return Response::error('Id is required', 400);
         }
 
-        $deletedCount = new Bill()->delete($id);
+        $isDeleted = new Bill()->delete($id);
 
-        if (!$deletedCount) {
+        if (!$isDeleted) {
             return Response::error('Bill not deleted');
         }
-        return Response::json("Deleted successfully: " . $deletedCount);
+        return Response::json("Deleted successfully");
     }
 }
