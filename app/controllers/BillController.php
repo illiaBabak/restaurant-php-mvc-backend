@@ -20,7 +20,6 @@ class BillController
         foreach ($bill['dishes'] as $dish) {
             fputcsv($out, [
                 $bill['waiter_id'] ?? '',
-                $bill['id'] ?? '',
                 $bill['created_at'],
                 $dish['dish_id'] ?? '',
                 $dish['quantity'] ?? 0,
@@ -49,15 +48,15 @@ class BillController
         exit;
     }
 
-    public function updateBill(string $id): string
+    public function updateBill(): string
     {
         $bodyData = Response::getBodyFromRequest();
 
-        if (!$bodyData || !$id) {
-            return Response::error('Request body and id are required', 400);
+        if (!$bodyData) {
+            return Response::error('Request body is required', 400);
         }
 
-        $isUpdated = new Bill()->update($id, $bodyData);
+        $isUpdated = new Bill()->update($bodyData);
 
         if (!$isUpdated) {
             return Response::error('Bill not updated');
@@ -65,8 +64,10 @@ class BillController
         return Response::json("Updated successfully");
     }
 
-    public function deleteBill(string $id): string
+    public function deleteBill(): string
     {
+        $id = Response::getBodyFromRequest()['id'];
+
         if (!$id) {
             return Response::error('Id is required', 400);
         }

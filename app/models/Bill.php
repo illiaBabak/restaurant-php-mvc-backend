@@ -19,10 +19,10 @@ class Bill
         $this->collection = Mongo::getDB()->selectCollection('bills');
     }
 
-    public function create(array $array): string
+    public function create(array $bill): string
     {
         // convert created_at to UTCDateTime 
-        $array['created_at'] = new UTCDateTime((int) (strtotime((string) $array['created_at']) * 1000));
+        $array['created_at'] = new UTCDateTime((int) (strtotime((string) $bill['created_at']) * 1000));
 
         try {
             $result = $this->collection->insertOne($array);
@@ -37,10 +37,10 @@ class Bill
         }
     }
 
-    public function update(string $id, array $array): bool
+    public function update(array $bill): bool
     {
         try {
-            $result = $this->collection->updateOne(['_id' => new ObjectId($id)], ['$set' => $array]);
+            $result = $this->collection->updateOne(['_id' => new ObjectId($bill['id'])], ['$set' => $bill]);
             return $result->getModifiedCount() > 0;
         } catch (Exception $e) {
             error_log('MongoDB update failed: ' . $e->getMessage());

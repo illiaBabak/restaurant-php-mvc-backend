@@ -38,10 +38,10 @@ class Waiter
         }
     }
 
-    public function update(string $waiterId, array $waiterData): bool
+    public function update(array $waiterData): bool
     {
         try {
-            $result = $this->collection->updateOne(['_id' => new ObjectId($waiterId)], ['$set' => $waiterData]);
+            $result = $this->collection->updateOne(['_id' => new ObjectId($waiterData['id'])], ['$set' => $waiterData]);
             return $result->getModifiedCount() > 0;
         } catch (Exception $e) {
             error_log('MongoDB update failed: ' . $e->getMessage());

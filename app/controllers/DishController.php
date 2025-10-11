@@ -45,15 +45,15 @@ class DishController
         return Response::json("Created successfully (dish id: " . $dishId . ")");
     }
 
-    public function updateDish(string $id): string
+    public function updateDish(): string
     {
         $bodyData = Response::getBodyFromRequest();
 
-        if (!$bodyData || !$id) {
-            return Response::error("Request body and id are required", 400);
+        if (!$bodyData) {
+            return Response::error("Request body is required", 400);
         }
 
-        $isUpdated = new Dish()->update($id, $bodyData);
+        $isUpdated = new Dish()->update($bodyData);
 
         if (!$isUpdated) {
             return Response::error("Dish not updated");
@@ -61,8 +61,10 @@ class DishController
         return Response::json("Updated successfully");
     }
 
-    public function deleteDish(string $id): string
+    public function deleteDish(): string
     {
+        $id = Response::getBodyFromRequest()['id'];
+
         if (!$id) {
             return Response::error('Id is required', 400);
         }

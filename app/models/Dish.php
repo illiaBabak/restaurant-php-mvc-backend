@@ -43,10 +43,10 @@ class Dish
         }
     }
 
-    public function update(string $id, array $dishData): bool
+    public function update(array $dishData): bool
     {
         try {
-            $result = $this->collection->updateOne(['_id' => new ObjectId($id)], ['$set' => $dishData]);
+            $result = $this->collection->updateOne(['_id' => new ObjectId($dishData['id'])], ['$set' => $dishData]);
             return $result->getModifiedCount() > 0;
         } catch (Exception $e) {
             error_log('MongoDB update failed: ' . $e->getMessage());

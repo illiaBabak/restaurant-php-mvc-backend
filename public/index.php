@@ -31,17 +31,17 @@ $router = new Router();
 
 $router->get('/waiters', WaiterController::class . '@getWaiters');
 $router->post('/waiters', WaiterController::class . '@createWaiter');
-$router->put('/waiters/{id}', WaiterController::class . '@updateWaiter');
-$router->delete('/waiters/{id}', WaiterController::class . '@deleteWaiter');
+$router->put('/waiters', WaiterController::class . '@updateWaiter');
+$router->delete('/waiters', WaiterController::class . '@deleteWaiter');
 
 $router->get('/dishes', DishController::class . '@getDishes');
 $router->post('/dishes', DishController::class . '@createDish');
-$router->put('/dishes/{id}', DishController::class . '@updateDish');
-$router->delete('/dishes/{id}', DishController::class . '@deleteDish');
+$router->put('/dishes', DishController::class . '@updateDish');
+$router->delete('/dishes', DishController::class . '@deleteDish');
 
 $router->post('/bills', BillController::class . '@createAndExportBill');
-$router->put('/bills/{id}', BillController::class . '@updateBill');
-$router->delete('/bills/{id}', BillController::class . '@deleteBill');
+$router->put('/bills', BillController::class . '@updateBill');
+$router->delete('/bills', BillController::class . '@deleteBill');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['_method'])) {
     $_SERVER['REQUEST_METHOD'] = strtoupper($_POST['_method']);
