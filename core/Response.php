@@ -33,8 +33,8 @@ final class Response
         return json_encode($payload, JSON_UNESCAPED_UNICODE);
     }
 
-    public static function getBodyFromRequest(): array
+    public static function getBodyFromRequest(): ?array
     {
-        return json_decode(file_get_contents('php://input'), true);
+        return json_decode(file_get_contents('php://input'), true) ?? null;
     }
 }

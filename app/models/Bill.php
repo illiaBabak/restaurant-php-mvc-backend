@@ -21,11 +21,10 @@ class Bill
 
     public function create(array $bill): string
     {
-        // convert created_at to UTCDateTime 
-        $array['created_at'] = new UTCDateTime((int) (strtotime((string) $bill['created_at']) * 1000));
+        $bill['createdAt'] = new UTCDateTime();
 
         try {
-            $result = $this->collection->insertOne($array);
+            $result = $this->collection->insertOne($bill);
             $insertedId = $result->getInsertedId();
 
             if ($insertedId === null) return '';

@@ -9,12 +9,13 @@ use App\Models\Dish;
 
 class DishController
 {
-    public function getDishes(): string
+    public function getDishesByPage(): string
     {
-        $dishes = new Dish()->getAll();
+        $page = (int) ($_GET['page'] ?? 1);
+        $dishes = new Dish()->getByPage($page);
 
-        if (!$dishes) {
-            return Response::error('Dishes not found', 404);
+        if (empty($dishes['pageData'])) {
+            return Response::error('Dishes not found for this page', 404);
         }
         return Response::json($dishes);
     }
@@ -63,13 +64,13 @@ class DishController
 
     public function deleteDish(): string
     {
-        $id = Response::getBodyFromRequest()['id'];
+        $bodyData = Response::getBodyFromRequest();
 
-        if (!$id) {
+        if (!$bodyData || !isset($bodyData['id'])) {
             return Response::error('Id is required', 400);
         }
 
-        $isDeleted = new Dish()->delete($id);
+        $isDeleted = new Dish()->delete($bodyData['id']);
 
         if (!$isDeleted) {
             return Response::error('Dish not deleted');

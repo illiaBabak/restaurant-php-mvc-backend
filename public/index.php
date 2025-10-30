@@ -29,12 +29,13 @@ Mongo::connect();
 
 $router = new Router();
 
-$router->get('/waiters', WaiterController::class . '@getWaiters');
+$router->get('/waiters', WaiterController::class . '@getWaitersByPage');
+$router->get('/waiters/all', WaiterController::class . '@getAllWaiters');
 $router->post('/waiters', WaiterController::class . '@createWaiter');
 $router->put('/waiters', WaiterController::class . '@updateWaiter');
 $router->delete('/waiters', WaiterController::class . '@deleteWaiter');
 
-$router->get('/dishes', DishController::class . '@getDishes');
+$router->get('/dishes', DishController::class . '@getDishesByPage');
 $router->post('/dishes', DishController::class . '@createDish');
 $router->put('/dishes', DishController::class . '@updateDish');
 $router->delete('/dishes', DishController::class . '@deleteDish');

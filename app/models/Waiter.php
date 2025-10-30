@@ -8,6 +8,9 @@ use Core\Mongo;
 use MongoDB\Collection;
 use MongoDB\BSON\ObjectId;
 use MongoDB\Driver\Exception\Exception;
+use MongoDB\BSON\UTCDateTime;
+
+const PAGE_SIZE = 10;
 
 class Waiter
 {
@@ -23,9 +26,32 @@ class Waiter
         return $this->collection->find()->toArray();
     }
 
+    public function getByPage(int $page): array
+    {
+        $totalCount = $this->collection->countDocuments();
+        $totalPages = (int) ceil($totalCount / PAGE_SIZE);
+        $pageData = $this->collection->find(
+            [],
+            [
+                'skip' => ($page - 1) * PAGE_SIZE,
+                'limit' => PAGE_SIZE,
+                'sort' => ['createdAt' => -1]
+            ]
+        )->toArray();
+
+        return [
+            'totalPages' => $totalPages,
+            'totalCount' => $totalCount,
+            'pageData' => $pageData,
+            'pageSize' => PAGE_SIZE,
+            'currentPageNumber' => $page
+        ];
+    }
+
     public function create(array $waiterData): string
     {
         try {
+            $waiterData['createdAt'] = new UTCDateTime();
             $result = $this->collection->insertOne($waiterData);
             $insertedId = $result->getInsertedId();
 
@@ -41,7 +67,15 @@ class Waiter
     public function update(array $waiterData): bool
     {
         try {
-            $result = $this->collection->updateOne(['_id' => new ObjectId($waiterData['id'])], ['$set' => $waiterData]);
+            $id = $waiterData['id'];
+            unset($waiterData['id']);
+            unset($waiterData['createdAt']);
+
+            $result = $this->collection->updateOne(
+                ['_id' => new ObjectId($id)],
+                ['$set' => $waiterData]
+            );
+
             return $result->getModifiedCount() > 0;
         } catch (Exception $e) {
             error_log('MongoDB update failed: ' . $e->getMessage());

@@ -15,12 +15,12 @@ class BillController
         header('Content-Type: text/csv; charset=utf-8');
 
         $out = fopen('php://output', 'w');
-        fputcsv($out, ['waiter_id', 'id', 'created_at', 'dish_id', 'quantity'], ',', '"', '\\');
+        fputcsv($out, ['waiter_id', 'createdAt', 'dish_id', 'quantity'], ',', '"', '\\');
 
         foreach ($bill['dishes'] as $dish) {
             fputcsv($out, [
                 $bill['waiter_id'] ?? '',
-                $bill['created_at'],
+                $bill['createdAt'] ?? '',
                 $dish['dish_id'] ?? '',
                 $dish['quantity'] ?? 0,
             ], ',', '"', '\\');

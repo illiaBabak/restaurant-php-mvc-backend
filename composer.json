@@ -7,7 +7,7 @@
     }
   },
   "scripts": {
-    "start": "php -S 127.0.0.1:8000 -t public"
+    "start": "php -S localhost:8000 -t public -d log_errors=1 -d error_log=php://stdout"
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^3.88"
