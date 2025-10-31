@@ -21,13 +21,30 @@ class Dish
         $this->collection = Mongo::getDB()->selectCollection('dishes');
     }
 
-    public function getByPage(int $page): array
+    public function getByPage(int $page, string|null $category, string|null $price): array
     {
-        $totalCount = $this->collection->countDocuments();
+        $filter = [];
+
+        if ($category && $category !== 'all') {
+            $filter['category'] = $category;
+        }
+
+        if ($price && $price !== 'all') {
+            if ($price === '10') {
+                $filter['price'] = ['$lt' => 10];
+            } else if ($price === '20') {
+                $filter['price'] = ['$lt' => 20];
+            } else if ($price === 'greater_than_20') {
+                $filter['price'] = ['$gt' => 20];
+            }
+        }
+
+        $totalCount = $this->collection->countDocuments($filter);
         $totalPages = (int) ceil($totalCount / PAGE_SIZE);
 
+
         $pageData = $this->collection->find(
-            [],
+            $filter,
             [
                 'skip' => ($page - 1) * PAGE_SIZE,
                 'limit' => PAGE_SIZE,

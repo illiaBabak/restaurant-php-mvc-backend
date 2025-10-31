@@ -12,7 +12,10 @@ class DishController
     public function getDishesByPage(): string
     {
         $page = (int) ($_GET['page'] ?? 1);
-        $dishes = new Dish()->getByPage($page);
+        $category = $_GET['category'] ?? null;
+        $price = $_GET['price'] ?? null;
+
+        $dishes = new Dish()->getByPage($page, $category, $price);
 
         if (empty($dishes['pageData'])) {
             return Response::error('Dishes not found for this page', 404);
