@@ -14,11 +14,12 @@ class DishController
         $page = (int) ($_GET['page'] ?? 1);
         $category = $_GET['category'] ?? null;
         $price = $_GET['price'] ?? null;
+        $search = $_GET['search'] ?? null;
 
-        $dishes = new Dish()->getByPage($page, $category, $price);
+        $dishes = new Dish()->getByPage($page, $category, $price, $search);
 
         if (empty($dishes['pageData'])) {
-            return Response::error('Dishes not found for this page', 404);
+            return Response::json([], 204);
         }
         return Response::json($dishes);
     }

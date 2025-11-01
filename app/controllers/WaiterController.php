@@ -22,8 +22,9 @@ class WaiterController
     public function getWaitersByPage(): string
     {
         $page = (int) ($_GET['page'] ?? 1);
+        $search = $_GET['search'] ?? null;
 
-        $waiters = new Waiter()->getByPage($page);
+        $waiters = new Waiter()->getByPage($page, $search);
 
         if (empty($waiters['pageData'])) {
             return Response::error('No waiters found for this page', 404);

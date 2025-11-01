@@ -21,7 +21,7 @@ class Dish
         $this->collection = Mongo::getDB()->selectCollection('dishes');
     }
 
-    public function getByPage(int $page, string|null $category, string|null $price): array
+    public function getByPage(int $page, string|null $category, string|null $price, string|null $search): array
     {
         $filter = [];
 
@@ -37,6 +37,15 @@ class Dish
             } else if ($price === 'greater_than_20') {
                 $filter['price'] = ['$gt' => 20];
             }
+        }
+
+        if ($search) {
+            $filter['$or'] = [
+                ['name' => ['$regex' => $search, '$options' => 'i']],
+                ['price' => ['$regex' => $search, '$options' => 'i']],
+                ['weight' => ['$regex' => $search, '$options' => 'i']],
+                ['category' => ['$regex' => $search, '$options' => 'i']],
+            ];
         }
 
         $totalCount = $this->collection->countDocuments($filter);

@@ -26,12 +26,24 @@ class Waiter
         return $this->collection->find()->toArray();
     }
 
-    public function getByPage(int $page): array
+    public function getByPage(int $page, string|null $search): array
     {
-        $totalCount = $this->collection->countDocuments();
+        $filter = [];
+
+        if ($search) {
+            $filter['$or'] = [
+                ['name' => ['$regex' => $search, '$options' => 'i']],
+                ['surname' => ['$regex' => $search, '$options' => 'i']],
+                ['email' => ['$regex' => $search, '$options' => 'i']],
+                ['phone' => ['$regex' => $search, '$options' => 'i']],
+            ];
+        }
+
+        $totalCount = $this->collection->countDocuments($filter);
         $totalPages = (int) ceil($totalCount / PAGE_SIZE);
+
         $pageData = $this->collection->find(
-            [],
+            $filter,
             [
                 'skip' => ($page - 1) * PAGE_SIZE,
                 'limit' => PAGE_SIZE,
