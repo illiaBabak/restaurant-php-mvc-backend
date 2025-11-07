@@ -6,6 +6,7 @@ namespace App\Controllers;
 
 use Core\Response;
 use App\Models\Bill;
+use Core\MailgunClient;
 
 class BillController
 {
@@ -38,13 +39,29 @@ class BillController
             return Response::error('Request body is required', 400);
         }
 
-        $billId = new Bill()->create($bodyData);
+        $bill = $bodyData['bill'];
+        $waiter = $bodyData['waiter'];
+
+        $billId = new Bill()->create($bill);
 
         if (!$billId) {
             return Response::error('Bill not created');
         }
 
-        $this->generateCSV($bodyData);
+        $dishesInHtmlTable = "";
+
+        foreach ($bill['dishes'] as $dish) {
+            $dishesInHtmlTable .= '<li>' . $dish['dish_id'] . ' - ' . $dish['quantity'] . '</li>';
+        }
+
+        (new MailgunClient())->sendEmail(
+            $waiter['email'],
+            'Hello ' . $waiter['name'],
+            '',
+            html: '<p>On your way was created a new bill with the following dishes:</p><ul>' . $dishesInHtmlTable . '</ul>',
+        );
+
+        $this->generateCSV($bill);
         exit;
     }
 
