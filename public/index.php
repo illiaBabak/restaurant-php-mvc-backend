@@ -29,20 +29,20 @@ Mongo::connect();
 
 $router = new Router();
 
-$router->get('/waiters', WaiterController::class . '@getWaitersByPage');
-$router->get('/waiters/all', WaiterController::class . '@getAllWaiters');
-$router->post('/waiters', WaiterController::class . '@createWaiter');
-$router->put('/waiters', WaiterController::class . '@updateWaiter');
-$router->delete('/waiters', WaiterController::class . '@deleteWaiter');
+$router->get('/waiter', WaiterController::class . '@getWaitersByPage');
+$router->get('/waiter/all', WaiterController::class . '@getAllWaiters');
+$router->post('/waiter', WaiterController::class . '@createWaiter');
+$router->put('/waiter', WaiterController::class . '@updateWaiter');
+$router->delete('/waiter', WaiterController::class . '@deleteWaiter');
 
-$router->get('/dishes', DishController::class . '@getDishesByPage');
-$router->post('/dishes', DishController::class . '@createDish');
-$router->put('/dishes', DishController::class . '@updateDish');
-$router->delete('/dishes', DishController::class . '@deleteDish');
+$router->get('/dish', DishController::class . '@getDishesByPage');
+$router->post('/dish', DishController::class . '@createDish');
+$router->put('/dish', DishController::class . '@updateDish');
+$router->delete('/dish', DishController::class . '@deleteDish');
 
-$router->post('/bills', BillController::class . '@createAndExportBill');
-$router->put('/bills', BillController::class . '@updateBill');
-$router->delete('/bills', BillController::class . '@deleteBill');
+$router->post('/bill', BillController::class . '@createAndExportBill');
+$router->put('/bill', BillController::class . '@updateBill');
+$router->delete('/bill', BillController::class . '@deleteBill');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['_method'])) {
     $_SERVER['REQUEST_METHOD'] = strtoupper($_POST['_method']);

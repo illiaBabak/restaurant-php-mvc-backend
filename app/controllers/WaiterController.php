@@ -6,9 +6,19 @@ namespace App\Controllers;
 
 use Core\Response;
 use App\Models\Waiter;
+use Mailgun\Mailgun;
+
 
 class WaiterController
 {
+    private Mailgun $mg;
+
+    public function __construct()
+    {
+
+        $this->mg = Mailgun::create(getenv('MAILGUN_API_KEY'));
+    }
+
     public function getAllWaiters(): string
     {
         $waiters = new Waiter()->getAll();
@@ -45,6 +55,17 @@ class WaiterController
         if (!$waiterId) {
             return Response::error('Waiter not created');
         }
+
+        $this->mg->messages()->send(
+            getenv('MAILGUN_DOMAIN'),
+            [
+                'from' => 'Mailgun Sandbox <postmaster@' . getenv('MAILGUN_DOMAIN') . '>',
+                'to' => $bodyData['email'],
+                'subject' => 'Hello ' . $bodyData['name'],
+                'text' => 'Congratulations beba!' . $bodyData['name'] . ', you have been added to the system as a waiter!'
+            ]
+        );
+
         return Response::json("Created successfully (waiter id: " . $waiterId . ")");
     }
 

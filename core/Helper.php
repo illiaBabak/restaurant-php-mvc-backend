@@ -8,8 +8,12 @@ use MongoDB\BSON\ObjectId;
 
 final class Helper
 {
-    public static function normalizeMongoId(array|object $data): array
+    public static function normalizeMongoId(array|object|string $data): array|string
     {
+        if (is_string($data)) {
+            return $data;
+        }
+
         if (is_object($data)) {
             $data = (array) $data;
         }
