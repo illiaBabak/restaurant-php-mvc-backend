@@ -3,7 +3,7 @@
         'name' => 'illiababak/restaurant-php-mvc-backend',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '9b5eb1a5835dd40b2db132c8216060b463daab67',
+        'reference' => 'e47631ff6ddd1e51842a582b45f6bcec0ea76659',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -121,7 +121,7 @@
         'illiababak/restaurant-php-mvc-backend' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '9b5eb1a5835dd40b2db132c8216060b463daab67',
+            'reference' => 'e47631ff6ddd1e51842a582b45f6bcec0ea76659',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -596,6 +596,15 @@
             'install_path' => __DIR__ . '/../symfony/string',
             'aliases' => array(),
             'dev_requirement' => true,
+        ),
+        'twilio/sdk' => array(
+            'pretty_version' => '8.8.5',
+            'version' => '8.8.5.0',
+            'reference' => '248dce83f5a0a21905cd4bf445080252cb04a8a6',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../twilio/sdk',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'vlucas/phpdotenv' => array(
             'pretty_version' => 'v5.6.2',

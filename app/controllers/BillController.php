@@ -7,6 +7,7 @@ namespace App\Controllers;
 use Core\Response;
 use App\Models\Bill;
 use Core\MailgunClient;
+use Core\Twilio;
 
 class BillController
 {
@@ -48,17 +49,30 @@ class BillController
             return Response::error('Bill not created');
         }
 
-        $dishesInHtmlTable = "";
+        // Send mail to waiter
+        // $dishesInHtmlTable = "";
+
+        // foreach ($bill['dishes'] as $dish) {
+        //     $dishesInHtmlTable .= '<li>' . $dish['dish_id'] . ' - ' . $dish['quantity'] . '</li>';
+        // }
+
+        // (new MailgunClient())->sendEmail(
+        //     $waiter['email'],
+        //     'Hello ' . $waiter['name'],
+        //     '',
+        //     html: '<p>On your way was created a new bill with the following dishes:</p><ul>' . $dishesInHtmlTable . '</ul>',
+        // );
+
+        // Send SMS to waiter
+        $dishesInText = "";
 
         foreach ($bill['dishes'] as $dish) {
-            $dishesInHtmlTable .= '<li>' . $dish['dish_id'] . ' - ' . $dish['quantity'] . '</li>';
+            $dishesInText .= 'Dish id: ' . $dish['dish_id'] . ' - ' . $dish['quantity'];
         }
-
-        (new MailgunClient())->sendEmail(
-            $waiter['email'],
-            'Hello ' . $waiter['name'],
-            '',
-            html: '<p>On your way was created a new bill with the following dishes:</p><ul>' . $dishesInHtmlTable . '</ul>',
+        print_r($waiter['phone_number']);
+        new Twilio()->sendSms(
+            $waiter['phone_number'],
+            "On your way was created a new bill with the following dishes: " . $dishesInText
         );
 
         $this->generateCSV($bill);
