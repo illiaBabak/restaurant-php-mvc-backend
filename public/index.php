@@ -4,6 +4,13 @@ declare(strict_types=1);
 
 require __DIR__ . '/../vendor/autoload.php';
 
+use Dotenv\Dotenv;
+use Core\Mongo;
+use Core\Router;
+use App\Controllers\WaiterController;
+use App\Controllers\DishController;
+use App\Controllers\BillController;
+
 // CORS headers
 header("Access-Control-Allow-Origin: https://restaurant-react-frontend-weld.vercel.app");
 header("Access-Control-Allow-Methods: GET, POST, PUT, PATCH, DELETE, OPTIONS");
@@ -16,14 +23,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
-$dotenv = Dotenv\Dotenv::createUnsafeImmutable(__DIR__ . '/../');
-$dotenv->load();
-
-use Core\Mongo;
-use Core\Router;
-use App\Controllers\WaiterController;
-use App\Controllers\DishController;
-use App\Controllers\BillController;
+// Локально читаем .env, на Railway переменные уже в окружении.
+$dotenv = Dotenv::createImmutable(__DIR__ . '/../');
+$dotenv->safeLoad();
 
 Mongo::connect();
 
