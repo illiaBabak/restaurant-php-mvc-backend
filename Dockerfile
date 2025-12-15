@@ -3,7 +3,10 @@ FROM php:8.3-cli-alpine
 WORKDIR /app
 COPY . /app
 
-# ✅ ext-mongodb
+# Install system CA certificates for TLS (MongoDB Atlas, etc.)
+RUN apk add --no-cache ca-certificates \
+  && update-ca-certificates
+
 RUN apk add --no-cache $PHPIZE_DEPS openssl-dev \
   && pecl install mongodb \
   && docker-php-ext-enable mongodb \
