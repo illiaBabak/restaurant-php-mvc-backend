@@ -13,7 +13,7 @@ class WaiterController
 {
     public function getAllWaiters(): string
     {
-        $waiters = new Waiter()->getAll();
+        $waiters = (new Waiter())->getAll();
 
         if (empty($waiters)) {
             return Response::error('No waiters found', 404);
@@ -26,7 +26,7 @@ class WaiterController
         $page = (int) ($_GET['page'] ?? 1);
         $search = $_GET['search'] ?? null;
 
-        $waiters = new Waiter()->getByPage($page, $search);
+        $waiters = (new Waiter())->getByPage($page, $search);
 
         if (empty($waiters['pageData'])) {
             return Response::error('No waiters found for this page', 404);
@@ -42,7 +42,7 @@ class WaiterController
             return Response::error('Request body is required', 400);
         }
 
-        $waiterId = new Waiter()->create($bodyData);
+        $waiterId = (new Waiter())->create($bodyData);
 
         if (!$waiterId) {
             return Response::error('Waiter not created');
@@ -65,7 +65,7 @@ class WaiterController
             return Response::error('Request body is required', 400);
         }
 
-        $isUpdated = new Waiter()->update($bodyData);
+        $isUpdated = (new Waiter())->update($bodyData);
 
         if (!$isUpdated) {
             return Response::error('Waiter not updated');
@@ -81,7 +81,7 @@ class WaiterController
             return Response::error('Id is required', 400);
         }
 
-        $isDeleted = new Waiter()->delete($bodyData['id']);
+        $isDeleted = (new Waiter())->delete($bodyData['id']);
 
         if (!$isDeleted) {
             return Response::error('Waiter not deleted');

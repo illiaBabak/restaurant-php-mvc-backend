@@ -43,25 +43,25 @@ class BillController
         $bill = $bodyData['bill'];
         $waiter = $bodyData['waiter'];
 
-        $billId = new Bill()->create($bill);
+        $billId = (new Bill())->create($bill);
 
         if (!$billId) {
             return Response::error('Bill not created');
         }
 
         // Send mail to waiter
-        // $dishesInHtmlTable = "";
+        $dishesInHtmlTable = "";
 
-        // foreach ($bill['dishes'] as $dish) {
-        //     $dishesInHtmlTable .= '<li>' . $dish['dish_id'] . ' - ' . $dish['quantity'] . '</li>';
-        // }
+        foreach ($bill['dishes'] as $dish) {
+            $dishesInHtmlTable .= '<li>' . $dish['dish_id'] . ' - ' . $dish['quantity'] . '</li>';
+        }
 
-        // (new MailgunClient())->sendEmail(
-        //     $waiter['email'],
-        //     'Hello ' . $waiter['name'],
-        //     '',
-        //     html: '<p>On your way was created a new bill with the following dishes:</p><ul>' . $dishesInHtmlTable . '</ul>',
-        // );
+        (new MailgunClient())->sendEmail(
+            $waiter['email'],
+            'Hello ' . $waiter['name'],
+            '',
+            html: '<p>On your way was created a new bill with the following dishes:</p><ul>' . $dishesInHtmlTable . '</ul>',
+        );
 
         // Send SMS to waiter
         $dishesInText = "";
@@ -70,7 +70,7 @@ class BillController
             $dishesInText .= 'Dish id: ' . $dish['dish_id'] . ' - ' . $dish['quantity'];
         }
         print_r($waiter['phone_number']);
-        new Twilio()->sendSms(
+        (new Twilio())->sendSms(
             $waiter['phone_number'],
             "On your way was created a new bill with the following dishes: " . $dishesInText
         );
@@ -87,7 +87,7 @@ class BillController
             return Response::error('Request body is required', 400);
         }
 
-        $isUpdated = new Bill()->update($bodyData);
+        $isUpdated = (new Bill())->update($bodyData);
 
         if (!$isUpdated) {
             return Response::error('Bill not updated');
@@ -103,7 +103,7 @@ class BillController
             return Response::error('Id is required', 400);
         }
 
-        $isDeleted = new Bill()->delete($id);
+        $isDeleted = (new Bill())->delete($id);
 
         if (!$isDeleted) {
             return Response::error('Bill not deleted');

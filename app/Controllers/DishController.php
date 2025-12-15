@@ -42,7 +42,7 @@ class DishController
             return Response::error("Request body is required", 400);
         }
 
-        $dishId = new Dish()->create($bodyData);
+        $dishId = (new Dish())->create($bodyData);
 
         if (!$dishId) {
             return Response::error("Dish not created");
@@ -58,7 +58,7 @@ class DishController
             return Response::error("Request body is required", 400);
         }
 
-        $isUpdated = new Dish()->update($bodyData);
+        $isUpdated = (new Dish())->update($bodyData);
 
         if (!$isUpdated) {
             return Response::error("Dish not updated");
@@ -74,7 +74,7 @@ class DishController
             return Response::error('Id is required', 400);
         }
 
-        $isDeleted = new Dish()->delete($bodyData['id']);
+        $isDeleted = (new Dish())->delete($bodyData['id']);
 
         if (!$isDeleted) {
             return Response::error('Dish not deleted');
