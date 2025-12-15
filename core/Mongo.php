@@ -13,7 +13,15 @@ final class Mongo
     public static function connect(): Client
     {
         if (!self::$client) {
-            self::$client = new Client(getenv('MONGO_URI'));
+            $uri = getenv('MONGO_URI');
+
+            // Explicit TLS configuration for MongoDB Atlas inside Docker/Alpine
+            $options = [
+                'tls' => true,
+                'tlsCAFile' => '/etc/ssl/certs/ca-certificates.crt',
+            ];
+
+            self::$client = new Client($uri, $options);
         }
         return self::$client;
     }

@@ -1,16 +1,14 @@
-FROM php:8.3-cli-alpine
+FROM php:8.3-cli
 
 WORKDIR /app
 COPY . /app
 
-# Install system CA certificates for TLS (MongoDB Atlas, etc.)
-RUN apk add --no-cache ca-certificates \
-  && update-ca-certificates
-
-RUN apk add --no-cache $PHPIZE_DEPS openssl-dev \
-  && pecl install mongodb \
-  && docker-php-ext-enable mongodb \
-  && apk del $PHPIZE_DEPS
+RUN apt-get update \
+ && apt-get install -y ca-certificates openssl \
+ && update-ca-certificates \
+ && pecl install mongodb \
+ && docker-php-ext-enable mongodb \
+ && rm -rf /var/lib/apt/lists/*
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 RUN composer install --no-dev --optimize-autoloader
