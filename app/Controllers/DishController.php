@@ -16,7 +16,7 @@ class DishController
         $price = $_GET['price'] ?? null;
         $search = $_GET['search'] ?? null;
 
-        $dishes = new Dish()->getByPage($page, $category, $price, $search);
+        $dishes = (new Dish())->getByPage($page, $category, $price, $search);
 
         if (empty($dishes['pageData'])) {
             return Response::json([], 204);
@@ -26,7 +26,7 @@ class DishController
 
     public function getDishById(string $id): string
     {
-        $dish = new Dish()->getById($id);
+        $dish = (new Dish())->getById($id);
 
         if (!$dish) {
             return Response::error('Dish not found', 404);
