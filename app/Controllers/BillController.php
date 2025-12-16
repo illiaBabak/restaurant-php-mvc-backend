@@ -32,7 +32,7 @@ class BillController
         exit;
     }
 
-    public function createAndExportBill(): string
+    public function createAndExportBill()
     {
         $bodyData = Response::getBodyFromRequest();
 
@@ -69,14 +69,12 @@ class BillController
         foreach ($bill['dishes'] as $dish) {
             $dishesInText .= 'Dish id: ' . $dish['dish_id'] . ' - ' . $dish['quantity'];
         }
-        print_r($waiter['phone_number']);
         (new Twilio())->sendSms(
             $waiter['phone_number'],
             "On your way was created a new bill with the following dishes: " . $dishesInText
         );
 
         $this->generateCSV($bill);
-        exit;
     }
 
     public function updateBill(): string

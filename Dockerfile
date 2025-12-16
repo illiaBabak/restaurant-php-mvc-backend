@@ -7,8 +7,8 @@ COPY . /app
 RUN apt-get update \
  && apt-get install -y ca-certificates openssl libssl-dev pkg-config git build-essential \
  && update-ca-certificates \
- && pecl install mongodb \
- && docker-php-ext-enable mongodb \
+  && pecl install mongodb \
+  && docker-php-ext-enable mongodb \
  && apt-get purge -y --auto-remove libssl-dev pkg-config git build-essential \
  && rm -rf /var/lib/apt/lists/*
 
